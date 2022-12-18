@@ -6,5 +6,7 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 @Repository
 public interface ReviewRepo extends JpaRepository<Review, Long>{
+
+    ArrayList<Review> findByRating(Integer rating);
     ArrayList<Review> findByUsername(String username);
 }
