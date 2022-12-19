@@ -2,6 +2,7 @@ package com.example.RecipeApi.services;
 import com.example.RecipeApi.exceptions.NoSuchRatingException;
 import com.example.RecipeApi.exceptions.NoSuchRecipeException;
 import com.example.RecipeApi.exceptions.NoSuchReviewException;
+import com.example.RecipeApi.exceptions.ReviewOwnRecipeException;
 import com.example.RecipeApi.models.Recipe;
 import com.example.RecipeApi.models.Review;
 
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Optional;
 
 
@@ -60,8 +62,11 @@ public class ReviewService {
         return reviews;
     }
 
-    public Recipe postNewReview(Review review, Long recipeId) throws NoSuchRecipeException {
+    public Recipe postNewReview(Review review, Long recipeId) throws NoSuchRecipeException, ReviewOwnRecipeException {
         Recipe recipe = recipeService.getRecipeById(recipeId);
+        if (Objects.equals(recipe.getUserName(), review.getUsername())) {
+            throw new ReviewOwnRecipeException("What kind of chef would review their own recipe???");
+        }
         recipe.getReviews().add(review);
         recipeService.updateRecipe(recipe, false);
         return recipe;

@@ -26,6 +26,7 @@ public class RecipeService {
         recipe.validate();
         recipe = recipeRepo.save(recipe);
         recipe.generateLocationURI();
+        recipe.generateAverageRating();
         return recipe;
     }
 
@@ -38,6 +39,7 @@ public class RecipeService {
 
         Recipe recipe = recipeOptional.get();
         recipe.generateLocationURI();
+        recipe.generateAverageRating();
         return recipe;
     }
 
@@ -51,6 +53,21 @@ public class RecipeService {
 
         for (Recipe r : matchingRecipes) {
             r.generateLocationURI();
+            r.generateAverageRating();
+        }
+        return matchingRecipes;
+    }
+
+    public ArrayList<Recipe> getRecipesByUserName(String userName) throws NoSuchRecipeException {
+        ArrayList<Recipe> matchingRecipes = recipeRepo.findByUserNameContaining(userName);
+
+        if (matchingRecipes.isEmpty()) {
+            throw new NoSuchRecipeException("No recipes could be found with that user name.");
+        }
+
+        for (Recipe r : matchingRecipes) {
+            r.generateLocationURI();
+            r.generateAverageRating();
         }
         return matchingRecipes;
     }
@@ -60,6 +77,9 @@ public class RecipeService {
 
         if (recipes.isEmpty()) {
             throw new NoSuchRecipeException("There are no recipes yet :( feel free to add one though");
+        }
+        for (Recipe recipe : recipes) {
+            recipe.generateAverageRating();
         }
         return recipes;
     }
@@ -84,6 +104,7 @@ public class RecipeService {
             recipe.validate();
             Recipe savedRecipe = recipeRepo.save(recipe);
             savedRecipe.generateLocationURI();
+            savedRecipe.generateAverageRating();
             return savedRecipe;
         } catch (NoSuchRecipeException e) {
             throw new NoSuchRecipeException("The recipe you passed in did not have an ID found in the database." +

@@ -1,0 +1,61 @@
+{
+    "name": "Jia Zhang Mian",
+    "minutesToMake": 25,
+    "difficultyRating":3,
+    "userName": "Meister Chef",
+    "ingredients": [
+        {
+        "name": "soy sauce",
+        "amount": 2
+     },
+    {
+        "name": "noodles",
+        "amount": 1
+    }
+    ],
+    "steps": [{
+        "stepNumber": 1,
+        "description": "make sauce"
+    },
+    {
+        "stepNumber": 2,
+        "description": "boil noodles"
+    }]
+}
+
+{   "id": 3,
+    "name": "Jia Zhang Mian",
+    "minutesToMake": 25,
+    "difficultyRating":3,
+    "ingredients": [
+        {
+        "name": "soy sauce",
+        "amount": 2
+     },
+    {
+        "name": "noodles",
+        "amount": 1
+    }
+    ],
+    "steps": [{
+        "stepNumber": 1,
+        "description": "make sauce"
+    },
+    {
+        "stepNumber": 2,
+        "description": "boil noodles"
+    }],
+    "reviews": [{
+        "description": "Great!",
+        "username": "Joe",
+        "rating": 10
+
+    }]
+}
+
+{
+        "description": "Great!",
+        "username": "Meister Chef",
+        "rating": 10
+
+    }

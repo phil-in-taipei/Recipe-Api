@@ -2,6 +2,7 @@ package com.example.RecipeApi.contollers;
 
 import com.example.RecipeApi.exceptions.NoSuchRecipeException;
 import com.example.RecipeApi.exceptions.NoSuchReviewException;
+import com.example.RecipeApi.exceptions.ReviewOwnRecipeException;
 import com.example.RecipeApi.models.Recipe;
 import com.example.RecipeApi.models.Review;
 import com.example.RecipeApi.services.ReviewService;
@@ -53,7 +54,7 @@ public class ReviewController {
         try {
             Recipe insertedRecipe = reviewService.postNewReview(review, recipeId);
             return ResponseEntity.created(insertedRecipe.getLocationURI()).body(insertedRecipe);
-        } catch (NoSuchRecipeException e) {
+        } catch (NoSuchRecipeException | ReviewOwnRecipeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }

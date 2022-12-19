@@ -32,6 +32,9 @@ public class Recipe {
     @Column(nullable = false)
     private Integer difficultyRating;
 
+    @Column(nullable = false)
+    private String userName;
+
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "recipeId", nullable = false, foreignKey = @ForeignKey)
     private Collection<Ingredient> ingredients = new ArrayList<>();
@@ -43,6 +46,22 @@ public class Recipe {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "recipeId", nullable = false, foreignKey = @ForeignKey)
     private Collection<Review> reviews;
+
+    @Transient
+    private Integer averageRating;
+
+    public void generateAverageRating() {
+        System.out.println("Generating average rating now!");
+        int totalRating = 0;
+        if (this.reviews.size() > 0) {
+            for (Review review : this.reviews) {
+                totalRating = totalRating + review.getRating();
+            }
+            this.averageRating = totalRating / this.reviews.size();
+        } else {
+            this.averageRating = totalRating;
+        }
+    }
 
     @Transient
     @JsonIgnore

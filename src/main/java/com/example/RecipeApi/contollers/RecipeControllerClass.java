@@ -59,6 +59,16 @@ public class RecipeControllerClass {
         }
     }
 
+    @GetMapping("/search/user/{name}")
+    public ResponseEntity<?> getRecipesByUserName(@PathVariable("name") String name) {
+        try {
+            ArrayList<Recipe> matchingRecipes = recipeService.getRecipesByUserName(name);
+            return ResponseEntity.ok(matchingRecipes);
+        } catch (NoSuchRecipeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteRecipeById(@PathVariable("id") Long id) {
