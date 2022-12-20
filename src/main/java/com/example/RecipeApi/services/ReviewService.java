@@ -67,6 +67,7 @@ public class ReviewService {
         if (Objects.equals(recipe.getUserName(), review.getUsername())) {
             throw new ReviewOwnRecipeException("What kind of chef would review their own recipe???");
         }
+        review.validate();
         recipe.getReviews().add(review);
         recipeService.updateRecipe(recipe, false);
         return recipe;

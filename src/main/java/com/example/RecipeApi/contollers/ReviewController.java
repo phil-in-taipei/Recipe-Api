@@ -9,12 +9,15 @@ import com.example.RecipeApi.services.ReviewService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 
 @RestController
 @RequestMapping("/review")
+@Validated
 public class ReviewController {
     @Autowired
     ReviewService reviewService;
@@ -50,7 +53,7 @@ public class ReviewController {
     }
 
     @PostMapping("/{recipeId}")
-    public ResponseEntity<?> postNewReview(@RequestBody Review review, @PathVariable("recipeId") Long recipeId) {
+    public ResponseEntity<?> postNewReview(@Valid @RequestBody Review review, @PathVariable("recipeId") Long recipeId) {
         try {
             Recipe insertedRecipe = reviewService.postNewReview(review, recipeId);
             return ResponseEntity.created(insertedRecipe.getLocationURI()).body(insertedRecipe);
@@ -70,7 +73,7 @@ public class ReviewController {
     }
 
     @PatchMapping
-    public ResponseEntity<?> updateReviewById(@RequestBody Review reviewToUpdate) {
+    public ResponseEntity<?> updateReviewById(@Valid @RequestBody Review reviewToUpdate) {
         try {
             Review review = reviewService.updateReviewById(reviewToUpdate);
             return ResponseEntity.ok(review);
