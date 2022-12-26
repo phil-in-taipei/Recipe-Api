@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -25,23 +27,39 @@ public class Review {
     //@Column(nullable = false)
     private String username;
 
-    @Valid
+    //@Valid
     @NotNull(message = "Rating cannot be null")
     //@Column(nullable = false)
+    @Min(
+            value = 0,
+            message = "There rating value cannot be below 0!"
+    )
+    @Max(
+            value = 10,
+            message = "There rating value cannot be above 10!"
+    )
     private Integer rating;
 
     private String description;
 
-    public void setRating(int rating) {
-        if (rating <= 1 || rating > 10) {
-            throw new IllegalStateException("Rating must be between 0 and 10.");
-        }
+//    public void setRating(int rating) {
+//        if (rating <= 0 || rating > 10) {
+//            throw new IllegalStateException("Rating must be between 0 and 10.");
+//        }
+//        this.rating = rating;
+//    }
+
+
+    public void setRating(Integer rating) {
+        //if (rating <= 0 || rating > 10) {
+        //    throw new IllegalStateException("Rating must be between 0 and 10.");
+       //}
         this.rating = rating;
     }
 
-   public void validate() throws IllegalStateException {
+    public void validate() throws IllegalStateException {
         if(rating==null) {
-           throw new IllegalStateException("Must enter a rating between 0 and 10.");
+           throw new IllegalStateException("Rating cannot be null!");
        }
     }
 

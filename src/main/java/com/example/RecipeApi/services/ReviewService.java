@@ -62,14 +62,16 @@ public class ReviewService {
         return reviews;
     }
 
-    public Recipe postNewReview(Review review, Long recipeId) throws NoSuchRecipeException, ReviewOwnRecipeException {
+    public Recipe postNewReview(Review review, Long recipeId) throws
+            NoSuchRecipeException, ReviewOwnRecipeException {
         Recipe recipe = recipeService.getRecipeById(recipeId);
         if (Objects.equals(recipe.getUserName(), review.getUsername())) {
             throw new ReviewOwnRecipeException("What kind of chef would review their own recipe???");
         }
-        review.validate();
+        //review.validate();
         recipe.getReviews().add(review);
         recipeService.updateRecipe(recipe, false);
+        System.out.println("RETURNING RECIPE: " + recipe.getId());
         return recipe;
     }
 

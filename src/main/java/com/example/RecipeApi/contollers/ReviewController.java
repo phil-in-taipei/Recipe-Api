@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 @RestController
 @RequestMapping("/review")
-@Validated
+//@Validated
 public class ReviewController {
     @Autowired
     ReviewService reviewService;
@@ -43,7 +43,8 @@ public class ReviewController {
     }
 
     @GetMapping("/user/{username}")
-    public ResponseEntity<?> getReviewByUsername(@PathVariable("username") String username) {
+    public ResponseEntity<?> getReviewByUsername(
+            @PathVariable("username") String username) {
         try {
             ArrayList<Review> reviews = reviewService.getReviewByUsername(username);
             return ResponseEntity.ok(reviews);
@@ -53,12 +54,16 @@ public class ReviewController {
     }
 
     @PostMapping("/{recipeId}")
-    public ResponseEntity<?> postNewReview(@Valid @RequestBody Review review, @PathVariable("recipeId") Long recipeId) {
+    public ResponseEntity<?> postNewReview(
+            @Valid @RequestBody Review review,
+            @PathVariable("recipeId") Long recipeId) {
         try {
+            System.out.println("***************POSTING NEW REVIEW*************************");
             Recipe insertedRecipe = reviewService.postNewReview(review, recipeId);
             return ResponseEntity.created(insertedRecipe.getLocationURI()).body(insertedRecipe);
-        } catch (NoSuchRecipeException | ReviewOwnRecipeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (NoSuchRecipeException | ReviewOwnRecipeException | IllegalStateException e) {
+            System.out.println("Caught the following error in postNewReview: " + e.getMessage());
+            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         }
     }
 
@@ -73,7 +78,8 @@ public class ReviewController {
     }
 
     @PatchMapping
-    public ResponseEntity<?> updateReviewById(@Valid @RequestBody Review reviewToUpdate) {
+    public ResponseEntity<?> updateReviewById(
+            @Valid @RequestBody Review reviewToUpdate) {
         try {
             Review review = reviewService.updateReviewById(reviewToUpdate);
             return ResponseEntity.ok(review);
