@@ -317,7 +317,7 @@ public class RecipeControllerUnitTest {
                         .contentType("application/json")
                         .content(TestUtil.convertObjectToJsonBytes(Recipe.builder().build()))
                 )
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isForbidden())
                 .andExpect(content().contentType("text/plain;charset=UTF-8"))
                 .andExpect(content().string("found in body?"));
 
