@@ -5,10 +5,12 @@ import com.example.RecipeApi.exceptions.NoSuchReviewException;
 import com.example.RecipeApi.exceptions.ReviewOwnRecipeException;
 import com.example.RecipeApi.models.Recipe;
 import com.example.RecipeApi.models.Review;
+import com.example.RecipeApi.models.securitymodels.CustomUserDetails;
 import com.example.RecipeApi.services.ReviewService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -59,6 +61,8 @@ public class ReviewController {
             @PathVariable("recipeId") Long recipeId) {
         try {
             System.out.println("***************POSTING NEW REVIEW*************************");
+            // the line below was on the website, but not in the repo
+            //review.setUser((CustomUserDetails) authentication.getPrincipal());
             Recipe insertedRecipe = reviewService.postNewReview(review, recipeId);
             return ResponseEntity.created(insertedRecipe.getLocationURI()).body(insertedRecipe);
         } catch (NoSuchRecipeException | ReviewOwnRecipeException | IllegalStateException e) {
@@ -68,6 +72,7 @@ public class ReviewController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasPermission(#id, 'Review', 'delete')")
     public ResponseEntity<?> deleteReviewById(@PathVariable("id") Long id) {
         try {
             Review review = reviewService.deleteReviewById(id);
@@ -78,6 +83,7 @@ public class ReviewController {
     }
 
     @PatchMapping
+    @PreAuthorize("hasPermission(#reviewToUpdate.id, 'Review', 'edit')")
     public ResponseEntity<?> updateReviewById(
             @Valid @RequestBody Review reviewToUpdate) {
         try {

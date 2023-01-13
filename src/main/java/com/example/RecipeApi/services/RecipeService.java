@@ -3,12 +3,14 @@ package com.example.RecipeApi.services;
 import com.example.RecipeApi.exceptions.NoSuchRecipeException;
 import com.example.RecipeApi.exceptions.NoSuchReviewException;
 import com.example.RecipeApi.models.Recipe;
+import com.example.RecipeApi.models.securitymodels.CustomUserDetails;
 import com.example.RecipeApi.repositories.RecipeRepo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +25,8 @@ public class RecipeService {
 
     @Transactional
     public Recipe createNewRecipe(Recipe recipe) throws IllegalStateException {
+        CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        recipe.setUser(userDetails);
         recipe.validate();
         recipe = recipeRepo.save(recipe);
         recipe.generateLocationURI();
