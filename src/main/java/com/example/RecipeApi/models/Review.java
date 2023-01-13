@@ -1,4 +1,6 @@
 package com.example.RecipeApi.models;
+import com.example.RecipeApi.models.securitymodels.CustomUserDetails;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 //import org.springframework.data.annotation.Id;
 import javax.persistence.*;
@@ -22,10 +24,15 @@ public class Review {
     @GeneratedValue
     private Long id;
 
-    //@Valid
-    @NotNull
-    //@Column(nullable = false)
-    private String username;
+    //@Valid (commented out prior to auth upgrade)
+    //@NotNull
+    //@Column(nullable = false) (commented out prior to auth upgrade)
+    //private String username; // replaced by user (for authentication)
+
+    @ManyToOne(optional = false)
+    @JoinColumn
+    @JsonIgnore
+    private CustomUserDetails user;
 
     //@Valid
     @NotNull(message = "Rating cannot be null")
@@ -61,6 +68,10 @@ public class Review {
         if(rating==null) {
            throw new IllegalStateException("Rating cannot be null!");
        }
+    }
+
+    public String getAuthor() {
+        return user.getUsername();
     }
 
 }

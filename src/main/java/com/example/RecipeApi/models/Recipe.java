@@ -1,4 +1,5 @@
 package com.example.RecipeApi.models;
+import com.example.RecipeApi.models.securitymodels.CustomUserDetails;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.ui.Model;
@@ -33,8 +34,13 @@ public class Recipe {
     @Column(nullable = false)
     private Integer difficultyRating;
 
-    @Column(nullable = false)
-    private String userName;
+    //@Column(nullable = false)
+    //private String userName; //commented out to upgrade for authenticatoin
+
+    @ManyToOne(optional = false)
+    @JoinColumn
+    @JsonIgnore
+    private CustomUserDetails user;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "recipeId", nullable = false, foreignKey = @ForeignKey)
@@ -94,6 +100,10 @@ public class Recipe {
         } catch (URISyntaxException e) {
             //Exception should stop here.
         }
+    }
+
+    public String getAuthor() {
+        return user.getUsername();
     }
 
 }
