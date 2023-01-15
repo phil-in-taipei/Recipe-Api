@@ -78,8 +78,9 @@ public class CustomPermissionEvaluator implements PermissionEvaluator {
 
     public boolean userIsAdmin(Authentication authentication) {
         Collection<Role> grantedAuthorities = (Collection<Role>) authentication.getAuthorities();
-
+        System.out.println("These are the granted authorities: " + grantedAuthorities);
         for (Role r : grantedAuthorities) {
+            System.out.println("This is one of the granted authorities: " + r.getAuthority());
             if (r.getAuthority().equals("ROLE_ADMIN")) {
                 return true;
             }

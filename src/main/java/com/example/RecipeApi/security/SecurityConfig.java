@@ -19,9 +19,9 @@ public class SecurityConfig {
         http
                 //disable CSRF for Postman usage
                 .csrf(csrf -> csrf.disable())
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
+                //.sessionManagement()
+                //.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                //.and()
                 //authorize all requests to access CSS and JavaScript // added webjars (img probably irrelevant)
                 .authorizeRequests(auth -> auth
                         .antMatchers("/css", "/js").permitAll()

@@ -35,9 +35,9 @@ public class RecipeApiApplicationTest implements CommandLineRunner {
     @Autowired
     UserRepo userRepo;
 
-    @Override
-    @Transactional
-    public void run(String... args) throws Exception {
+   // @Override
+    // @Transactional
+    //public void run(String... args) throws Exception {
         System.out.println("STARTING WITH TEST DATABASE SETUP");
 
         UserMeta userMeta = UserMeta.builder().name("test user").email("email@email.com").build();
