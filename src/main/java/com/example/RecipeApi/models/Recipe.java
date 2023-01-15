@@ -35,7 +35,7 @@ public class Recipe {
     private Integer difficultyRating;
 
     //@Column(nullable = false)
-    //private String userName; //commented out to upgrade for authenticatoin
+    //private String userName; //commented out to upgrade for authentication
 
     @ManyToOne(optional = false)
     @JoinColumn

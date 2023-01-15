@@ -1,15 +1,17 @@
 package com.example.RecipeApi.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.PermissionEvaluator;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.stereotype.Component;
+
 import com.example.RecipeApi.models.Recipe;
 import com.example.RecipeApi.models.Review;
 import com.example.RecipeApi.models.securitymodels.CustomUserDetails;
 import com.example.RecipeApi.models.securitymodels.Role;
 import com.example.RecipeApi.repositories.RecipeRepo;
 import com.example.RecipeApi.repositories.ReviewRepo;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.PermissionEvaluator;
-import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityNotFoundException;
 import java.io.Serializable;
@@ -26,18 +28,20 @@ public class CustomPermissionEvaluator implements PermissionEvaluator {
 
     @Override
     public boolean hasPermission(Authentication authentication, Object targetDomainObject, Object permission) {
-        //this method will not be used. But if used by accident, should always block access for good measure.
+        //this method will not be used. But if used by accident should always block access for good measure.
         return false;
     }
 
     @Override
     public boolean hasPermission(Authentication authentication, Serializable targetId, String targetType, Object permission) {
+        System.out.println("Calling the 'has permission' method in custom permission evaluator");
         if (!permission.getClass().equals(String.class)) {
             throw new SecurityException("Cannot execute hasPermission() calls where permission is not in String form");
         }
 
         //if the user is an admin they should be allowed to proceed
         if (userIsAdmin(authentication)) {
+            System.out.println("The user is authenticated -- this is inside has permission");
             return true;
         } else {
             //otherwise, the user must be the owner of the object to edit it.
@@ -51,6 +55,8 @@ public class CustomPermissionEvaluator implements PermissionEvaluator {
                 }
 
                 //if the author of the entity matches the current user they are the owner of the recipe and should be allowed access
+                System.out.println("This is the author inside the recipe object: " + recipe.get().getAuthor());
+                System.out.println("This is the username inside the user details object: " + userDetails.getUsername());
                 return recipe.get().getAuthor().equals(userDetails.getUsername());
 
             } else if (targetType.equalsIgnoreCase("review")) {
@@ -60,6 +66,8 @@ public class CustomPermissionEvaluator implements PermissionEvaluator {
                 }
 
                 //if the author of the entity matches the current user they are the owner of the review and should be allowed access
+                System.out.println("This is the author inside the review object: " + review.get().getAuthor());
+                System.out.println("This is the username inside the user details object: " + userDetails.getUsername());
                 return review.get().getAuthor().equals(userDetails.getUsername());
             }
 

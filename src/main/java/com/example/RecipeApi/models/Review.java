@@ -30,6 +30,7 @@ public class Review {
     //private String username; // replaced by user (for authentication)
 
     @ManyToOne(optional = false)
+    @NotNull
     @JoinColumn
     @JsonIgnore
     private CustomUserDetails user;

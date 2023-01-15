@@ -8,5 +8,7 @@ import java.util.ArrayList;
 public interface ReviewRepo extends JpaRepository<Review, Long>{
 
     ArrayList<Review> findByRating(Integer rating);
-    ArrayList<Review> findByUsername(String username);
+    //ArrayList<Review> findByUsername(String username);
+
+    ArrayList<Review> findByUser_Username(String username);
 }
